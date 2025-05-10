@@ -1,0 +1,890 @@
+<!DOCTYPE html>
+<html lang="en">
+<!--sorry for shitty code-->
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>iViewPikidiary2</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        :root {
+            --primary-color: #4a9f7b;
+            --primary-light: #e8f5e9;
+            --accent-color: #78b590;
+            --text-color: #2e3d32;
+            --text-light: #5a6b5f;
+            --bg-color: #f0f7f1;
+            --card-bg: #ffffff;
+            --border-radius: 16px;
+            --shadow: 0 8px 30px rgba(74, 159, 123, 0.08);
+            --transition: all 0.3s ease;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background-color: var(--bg-color);
+            color: var(--text-color);
+            line-height: 1.6;
+            padding-bottom: 40px;
+        }
+
+        .container {
+            max-width: 900px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+
+        .header {
+            text-align: center;
+            padding: 40px 0;
+            background: linear-gradient(135deg, #6ab594, #4a9f7b);
+            color: white;
+            border-radius: var(--border-radius);
+            margin-bottom: 30px;
+            box-shadow: var(--shadow);
+            position: relative;
+            overflow: hidden;
+        }
+
+        .header::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-image: url("data:image/svg+xml,%3Csvg width='100' height='100' viewBox='0 0 100 100' xmlns='http://www.w3.org/2000/svg'%3E%3Cpath d='M11 18c3.866 0 7-3.134 7-7s-3.134-7-7-7-7 3.134-7 7 3.134 7 7 7zm48 25c3.866 0 7-3.134 7-7s-3.134-7-7-7-7 3.134-7 7 3.134 7 7 7zm-43-7c1.657 0 3-1.343 3-3s-1.343-3-3-3-3 1.343-3 3 1.343 3 3 3zm63 31c1.657 0 3-1.343 3-3s-1.343-3-3-3-3 1.343-3 3 1.343 3 3 3zM34 90c1.657 0 3-1.343 3-3s-1.343-3-3-3-3 1.343-3 3 1.343 3 3 3zm56-76c1.657 0 3-1.343 3-3s-1.343-3-3-3-3 1.343-3 3 1.343 3 3 3zM12 86c2.21 0 4-1.79 4-4s-1.79-4-4-4-4 1.79-4 4 1.79 4 4 4zm28-65c2.21 0 4-1.79 4-4s-1.79-4-4-4-4 1.79-4 4 1.79 4 4 4zm23-11c2.76 0 5-2.24 5-5s-2.24-5-5-5-5 2.24-5 5 2.24 5 5 5zm-6 60c2.21 0 4-1.79 4-4s-1.79-4-4-4-4 1.79-4 4 1.79 4 4 4zm29 22c2.76 0 5-2.24 5-5s-2.24-5-5-5-5 2.24-5 5 2.24 5 5 5zM32 63c2.76 0 5-2.24 5-5s-2.24-5-5-5-5 2.24-5 5 2.24 5 5 5zm57-13c2.76 0 5-2.24 5-5s-2.24-5-5-5-5 2.24-5 5 2.24 5 5 5zm-9-21c1.105 0 2-.895 2-2s-.895-2-2-2-2 .895-2 2 .895 2 2 2zM60 91c1.105 0 2-.895 2-2s-.895-2-2-2-2 .895-2 2 .895 2 2 2zM35 41c1.105 0 2-.895 2-2s-.895-2-2-2-2 .895-2 2 .895 2 2 2zM12 60c1.105 0 2-.895 2-2s-.895-2-2-2-2 .895-2 2 .895 2 2 2z' fill='rgba(255,255,255,0.1)' fill-opacity='0.1' fill-rule='evenodd'/%3E%3C/svg%3E");
+            opacity: 0.7;
+        }
+
+        .app-title {
+            font-size: 3rem;
+            font-weight: 800;
+            margin-bottom: 8px;
+            position: relative;
+            z-index: 1;
+            text-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+        }
+
+        .app-subtitle {
+            font-size: 1.1rem;
+            opacity: 0.9;
+            max-width: 600px;
+            margin: 0 auto;
+            position: relative;
+            z-index: 1;
+        }
+
+        .search-form {
+            max-width: 600px;
+            margin: 0 auto 40px;
+            display: flex;
+            background-color: var(--card-bg);
+            border-radius: var(--border-radius);
+            padding: 8px;
+            box-shadow: var(--shadow);
+            transition: var(--transition);
+        }
+
+        .search-form:focus-within {
+            box-shadow: 0 10px 40px rgba(74, 159, 123, 0.15);
+            transform: translateY(-2px);
+        }
+
+        .search-input {
+            flex-grow: 1;
+            border: none;
+            padding: 16px;
+            font-size: 18px;
+            background-color: #f7f9f8;
+            border-radius: var(--border-radius);
+            outline: none;
+            color: var(--text-color);
+        }
+
+        .search-button {
+            background-color: var(--primary-color);
+            color: white;
+            border: none;
+            padding: 0 26px;
+            border-radius: var(--border-radius);
+            font-size: 16px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: var(--transition);
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .search-button:hover {
+            background-color: #3d8c6a;
+            transform: translateY(-2px);
+        }
+
+        .search-button i {
+            font-size: 18px;
+        }
+
+        .loading {
+            text-align: center;
+            padding: 30px;
+            color: var(--text-light);
+            font-size: 18px;
+            background-color: var(--card-bg);
+            border-radius: var(--border-radius);
+            box-shadow: var(--shadow);
+            animation: pulse 1.5s infinite ease-in-out;
+        }
+
+        @keyframes pulse {
+            0% {
+                opacity: 0.6;
+            }
+
+            50% {
+                opacity: 0.9;
+            }
+
+            100% {
+                opacity: 0.6;
+            }
+        }
+
+        .error {
+            color: #e74c3c;
+            padding: 20px;
+            background-color: #fdf2f2;
+            border-left: 5px solid #e74c3c;
+            border-radius: 8px;
+            margin: 20px 0;
+            font-size: 16px;
+        }
+
+        .profile {
+            background-color: var(--card-bg);
+            border-radius: var(--border-radius);
+            overflow: hidden;
+            box-shadow: var(--shadow);
+            margin-bottom: 30px;
+            transition: var(--transition);
+        }
+
+        .profile:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 15px 50px rgba(74, 159, 123, 0.1);
+        }
+
+        .profile-banner {
+            width: 100%;
+            height: 240px;
+            object-fit: cover;
+        }
+
+        .profile-header {
+            display: flex;
+            padding: 20px 30px;
+            align-items: center;
+            position: relative;
+        }
+
+        .profile-avatar {
+            width: 120px;
+            height: 120px;
+            border-radius: 50%;
+            border: 5px solid white;
+            margin-top: -80px;
+            object-fit: cover;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+        }
+
+        .profile-info {
+            margin-left: 25px;
+        }
+
+        .username {
+            font-size: 28px;
+            font-weight: 700;
+            margin: 0;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .verified-badge {
+            color: var(--primary-color);
+            background-color: var(--primary-light);
+            border-radius: 50%;
+            width: 22px;
+            height: 22px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .verified-badge i {
+            font-size: 12px;
+        }
+
+        .stats {
+            display: flex;
+            gap: 24px;
+            margin-top: 8px;
+            color: var(--text-light);
+            font-size: 15px;
+        }
+
+        .stat {
+            display: flex;
+            align-items: center;
+            gap: 6px;
+        }
+
+        .stat-value {
+            font-weight: 600;
+            color: var(--text-color);
+        }
+
+        .bio {
+            padding: 20px 30px;
+            border-top: 1px solid rgba(0, 0, 0, 0.05);
+            white-space: pre-wrap;
+            font-size: 16px;
+            line-height: 1.6;
+        }
+
+        .login-streak {
+            display: inline-flex;
+            align-items: center;
+            margin-top: 10px;
+            background-color: #e8f5e9;
+            padding: 6px 12px;
+            border-radius: 20px;
+            color: #388e3c;
+            font-weight: 500;
+            font-size: 14px;
+            gap: 6px;
+        }
+
+        .badges-section {
+            padding: 20px 30px;
+            border-top: 1px solid rgba(0, 0, 0, 0.05);
+        }
+
+        .section-title {
+            font-size: 20px;
+            font-weight: 600;
+            margin-bottom: 16px;
+            color: var(--text-color);
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .section-title i {
+            color: var(--primary-color);
+            font-size: 18px;
+        }
+
+        .achievements,
+        .badges {
+            display: flex;
+            gap: 10px;
+            flex-wrap: wrap;
+            margin-bottom: 25px;
+        }
+
+        .achievement,
+        .badge {
+            display: flex;
+            align-items: center;
+            background-color: #f8f9f8;
+            padding: 8px 14px;
+            border-radius: 30px;
+            font-size: 14px;
+            gap: 8px;
+            transition: var(--transition);
+            border: 1px solid rgba(74, 159, 123, 0.1);
+        }
+
+        .achievement:hover,
+        .badge:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 5px 15px rgba(74, 159, 123, 0.1);
+        }
+
+        .achievement img,
+        .badge img {
+            width: 24px;
+            height: 24px;
+            border-radius: 50%;
+        }
+
+        .posts-container {
+            margin-top: 15px;
+        }
+
+        .posts-title {
+            font-size: 24px;
+            font-weight: 700;
+            margin-bottom: 20px;
+            color: var(--text-color);
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .posts-title i {
+            color: var(--primary-color);
+        }
+
+        .post {
+            background-color: var(--card-bg);
+            border-radius: var(--border-radius);
+            padding: 24px;
+            margin-bottom: 24px;
+            box-shadow: var(--shadow);
+            transition: var(--transition);
+        }
+
+        .post:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 15px 50px rgba(74, 159, 123, 0.08);
+        }
+
+        .post-header {
+            display: flex;
+            align-items: center;
+            margin-bottom: 15px;
+        }
+
+        .post-author {
+            font-weight: 600;
+            font-size: 17px;
+            margin-right: 12px;
+        }
+
+        .post-time {
+            color: var(--text-light);
+            font-size: 14px;
+        }
+
+        .post-tags {
+            margin-left: auto;
+            display: flex;
+            gap: 8px;
+        }
+
+        .pinned-tag,
+        .locked-tag {
+            padding: 4px 10px;
+            border-radius: 20px;
+            font-size: 12px;
+            font-weight: 500;
+            display: flex;
+            align-items: center;
+            gap: 5px;
+        }
+
+        .pinned-tag {
+            background-color: #e8f5e9;
+            color: #388e3c;
+        }
+
+        .locked-tag {
+            background-color: #f1f8e9;
+            color: #558b2f;
+        }
+
+        .post-content {
+            margin-bottom: 20px;
+            font-size: 16px;
+            line-height: 1.6;
+        }
+
+        .post-images {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 12px;
+            margin: 20px 0;
+        }
+
+        .post-images img {
+            width: 100%;
+            border-radius: 12px;
+            transition: var(--transition);
+        }
+
+        .post-images img:hover {
+            transform: scale(1.02);
+        }
+
+        .post-footer {
+            display: flex;
+            gap: 24px;
+            color: var(--text-light);
+            margin-top: 15px;
+            padding-top: 15px;
+            border-top: 1px solid rgba(74, 159, 123, 0.1);
+        }
+
+        .post-action {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            font-size: 14px;
+            font-weight: 500;
+            transition: var(--transition);
+            padding: 8px 12px;
+            border-radius: 20px;
+        }
+
+        .post-action:hover {
+            background-color: #f5f8f6;
+            color: var(--primary-color);
+        }
+
+        .post-action i {
+            font-size: 16px;
+        }
+
+        .likes-action:hover {
+            color: #66bb6a;
+        }
+
+        .comments-action:hover {
+            color: var(--primary-color);
+        }
+
+        .no-results {
+            text-align: center;
+            padding: 40px;
+            background-color: var(--card-bg);
+            border-radius: var(--border-radius);
+            box-shadow: var(--shadow);
+            color: var(--text-light);
+        }
+
+        .no-results i {
+            font-size: 50px;
+            margin-bottom: 20px;
+            color: #d1e7d6;
+        }
+
+        .no-results p {
+            font-size: 18px;
+        }
+
+        @media (max-width: 768px) {
+            .header {
+                padding: 30px 0;
+            }
+
+            .app-title {
+                font-size: 2.2rem;
+            }
+
+            .profile-header {
+                flex-direction: column;
+                text-align: center;
+            }
+
+            .profile-avatar {
+                margin-top: -60px;
+            }
+
+            .profile-info {
+                margin-left: 0;
+                margin-top: 15px;
+            }
+
+            .username {
+                justify-content: center;
+            }
+
+            .stats {
+                justify-content: center;
+            }
+
+            .search-button span {
+                display: none;
+            }
+
+            .post-tags {
+                margin-left: 0;
+                margin-top: 10px;
+            }
+
+            .post-header {
+                flex-wrap: wrap;
+            }
+        }
+
+        @media (max-width: 480px) {
+            .container {
+                padding: 15px;
+            }
+
+            .search-input {
+                padding: 12px;
+                font-size: 16px;
+            }
+
+            .post {
+                padding: 16px;
+            }
+
+            .profile-avatar {
+                width: 100px;
+                height: 100px;
+            }
+
+            .post-footer {
+                flex-wrap: wrap;
+            }
+        }
+    </style>
+</head>
+
+<body>
+    <div class="container">
+        <header class="header">
+            <h1 class="app-title">iViewPikidiary2</h1>
+            <p class="app-subtitle">so #swag</p>
+        </header>
+
+        <form id="pikidiaryForm" class="search-form">
+            <input type="text" id="userInput" class="search-input" name="userInput" placeholder="pikidiary username"
+                required>
+            <button type="submit" class="search-button">
+                <i class="fa-solid fa-magnifying-glass"></i>
+                <span>search</span>
+            </button>
+        </form>
+
+        <div id="results"></div>
+    </div>
+
+    <script>
+        document.getElementById('pikidiaryForm').addEventListener('submit', function (e) {
+            e.preventDefault();
+            fetchPikidiaryUser();
+        });
+
+        async function fetchPikidiaryUser() {
+            const username = document.getElementById('userInput').value.trim();
+            if (!username) return;
+
+            const resultsDiv = document.getElementById('results');
+            resultsDiv.innerHTML = '<div class="loading"><i class="fa-solid fa-spinner fa-spin"></i> loading for ' + username + '...</div>';
+
+            try {
+                const response = await fetch(`https://pikidiary-api.vercel.app?username=${encodeURIComponent(username)}`);
+
+                if (!response.ok) {
+                    throw new Error(`error, status: ${response.status}`);
+                }
+
+                const data = await response.json();
+
+                displayUserProfile(data);
+
+            } catch (error) {
+                console.error('error getting data', error);
+                resultsDiv.innerHTML = `
+                    <div class="error">
+                        <p><i class="fa-solid fa-triangle-exclamation"></i> error loading the profile: ${error.message}</p>
+                        <p>make sure username is real and try again</p>
+                    </div>
+                `;
+            }
+        }
+
+        function displayUserProfile(userData) {
+            const resultsDiv = document.getElementById('results');
+
+            resultsDiv.innerHTML = '';
+
+            if (!userData || !userData.username) {
+                resultsDiv.innerHTML = `
+                    <div class="no-results">
+                        <i class="fa-solid fa-user-slash"></i>
+                        <p>no user found with that name LMFAO</p>
+                    </div>
+                `;
+                return;
+            }
+
+            const profileSection = document.createElement('div');
+            profileSection.className = 'profile';
+
+            if (userData.banner) {
+                const banner = document.createElement('img');
+                banner.src = userData.banner;
+                banner.className = 'profile-banner';
+                banner.alt = `${userData.username}'s banner`;
+                profileSection.appendChild(banner);
+            }
+
+            const header = document.createElement('div');
+            header.className = 'profile-header';
+
+            const avatar = document.createElement('img');
+            avatar.src = userData.pfp || 'https://pikidiary.lol/img/default-pfp.png';
+            avatar.className = 'profile-avatar';
+            avatar.alt = `${userData.username}'s profile picture`;
+            header.appendChild(avatar);
+
+            const info = document.createElement('div');
+            info.className = 'profile-info';
+
+            const username = document.createElement('h2');
+            username.className = 'username';
+            username.textContent = userData.username;
+            if (userData.isVerified) {
+                const verifiedBadge = document.createElement('span');
+                verifiedBadge.className = 'verified-badge';
+                verifiedBadge.innerHTML = '<i class="fa-solid fa-check"></i>';
+                verifiedBadge.title = 'Verified user';
+                username.appendChild(verifiedBadge);
+            }
+            info.appendChild(username);
+
+            const stats = document.createElement('div');
+            stats.className = 'stats';
+
+            const followersDiv = document.createElement('div');
+            followersDiv.className = 'stat';
+            followersDiv.innerHTML = `
+                <i class="fa-solid fa-user-group"></i>
+                <span class="stat-value">${userData.followers}</span> followers
+            `;
+            stats.appendChild(followersDiv);
+
+            const followingDiv = document.createElement('div');
+            followingDiv.className = 'stat';
+            followingDiv.innerHTML = `
+                <i class="fa-solid fa-user-plus"></i>
+                <span class="stat-value">${userData.following}</span> following
+            `;
+            stats.appendChild(followingDiv);
+
+            info.appendChild(stats);
+
+            if (userData.loginStreak) {
+                const streak = document.createElement('div');
+                streak.className = 'login-streak';
+                streak.innerHTML = `<i class="fa-solid fa-fire"></i> ${userData.loginStreak} day login streak`;
+                info.appendChild(streak);
+            }
+
+            header.appendChild(info);
+            profileSection.appendChild(header);
+
+            if (userData.bio) {
+                const bioDiv = document.createElement('div');
+                bioDiv.className = 'bio';
+                bioDiv.innerText = userData.bio.replace(/<[^>]*>/g, '');
+                profileSection.appendChild(bioDiv);
+            }
+
+            if ((userData.achievements && userData.achievements.length > 0) ||
+                (userData.badges && userData.badges.length > 0)) {
+
+                const achievementsSection = document.createElement('div');
+                achievementsSection.className = 'badges-section';
+
+                if (userData.achievements && userData.achievements.length > 0) {
+                    const achievementsTitle = document.createElement('h3');
+                    achievementsTitle.className = 'section-title';
+                    achievementsTitle.innerHTML = '<i class="fa-solid fa-trophy"></i> achievements';
+                    achievementsSection.appendChild(achievementsTitle);
+
+                    const achievementsDiv = document.createElement('div');
+                    achievementsDiv.className = 'achievements';
+
+                    userData.achievements.forEach(achievement => {
+                        const achievementDiv = document.createElement('div');
+                        achievementDiv.className = 'achievement';
+                        achievementDiv.title = achievement.description;
+
+                        if (achievement.iconUrl) {
+                            const icon = document.createElement('img');
+                            icon.src = achievement.iconUrl;
+                            icon.alt = achievement.name;
+                            achievementDiv.appendChild(icon);
+                        } else {
+                            const defaultIcon = document.createElement('i');
+                            defaultIcon.className = 'fa-solid fa-medal';
+                            achievementDiv.appendChild(defaultIcon);
+                        }
+
+                        const name = document.createElement('span');
+                        name.textContent = achievement.name;
+                        achievementDiv.appendChild(name);
+
+                        achievementsDiv.appendChild(achievementDiv);
+                    });
+
+                    achievementsSection.appendChild(achievementsDiv);
+                }
+
+                if (userData.badges && userData.badges.length > 0) {
+                    const badgesTitle = document.createElement('h3');
+                    badgesTitle.className = 'section-title';
+                    badgesTitle.innerHTML = '<i class="fa-solid fa-certificate"></i> badges';
+                    achievementsSection.appendChild(badgesTitle);
+
+                    const badgesDiv = document.createElement('div');
+                    badgesDiv.className = 'badges';
+
+                    userData.badges.forEach(badge => {
+                        const badgeDiv = document.createElement('div');
+                        badgeDiv.className = 'badge';
+                        badgeDiv.title = badge.description;
+
+                        if (badge.iconUrl) {
+                            const icon = document.createElement('img');
+                            icon.src = badge.iconUrl;
+                            icon.alt = badge.name;
+                            badgeDiv.appendChild(icon);
+                        } else {
+                            const defaultIcon = document.createElement('i');
+                            defaultIcon.className = 'fa-solid fa-award';
+                            badgeDiv.appendChild(defaultIcon);
+                        }
+
+                        const name = document.createElement('span');
+                        name.textContent = badge.name;
+                        badgeDiv.appendChild(name);
+
+                        badgesDiv.appendChild(badgeDiv);
+                    });
+
+                    achievementsSection.appendChild(badgesDiv);
+                }
+
+                profileSection.appendChild(achievementsSection);
+            }
+
+            resultsDiv.appendChild(profileSection);
+
+            if (userData.posts && userData.posts.length > 0) {
+                const postsTitle = document.createElement('h2');
+                postsTitle.className = 'posts-title';
+                postsTitle.innerHTML = '<i class="fa-solid fa-newspaper"></i> recent posts';
+                resultsDiv.appendChild(postsTitle);
+
+                const postsContainer = document.createElement('div');
+                postsContainer.className = 'posts-container';
+
+                userData.posts.forEach(post => {
+                    const postElement = document.createElement('div');
+                    postElement.className = 'post';
+
+                    const postHeader = document.createElement('div');
+                    postHeader.className = 'post-header';
+
+                    const postAuthor = document.createElement('div');
+                    postAuthor.className = 'post-author';
+                    postAuthor.textContent = post.author;
+                    postHeader.appendChild(postAuthor);
+
+                    const postTime = document.createElement('div');
+                    postTime.className = 'post-time';
+                    const date = new Date(post.timestamp);
+                    postTime.textContent = date.toLocaleString();
+                    postHeader.appendChild(postTime);
+
+                    const postTags = document.createElement('div');
+                    postTags.className = 'post-tags';
+
+                    if (post.isPinned) {
+                        const pinnedTag = document.createElement('span');
+                        pinnedTag.className = 'pinned-tag';
+                        pinnedTag.innerHTML = '<i class="fa-solid fa-thumbtack"></i> pinned';
+                        postTags.appendChild(pinnedTag);
+                    }
+
+                    if (post.isLocked) {
+                        const lockedTag = document.createElement('span');
+                        lockedTag.className = 'locked-tag';
+                        lockedTag.innerHTML = '<i class="fa-solid fa-lock"></i> locked';
+                        postTags.appendChild(lockedTag);
+                    }
+
+                    postHeader.appendChild(postTags);
+                    postElement.appendChild(postHeader);
+
+                    const postContent = document.createElement('div');
+                    postContent.className = 'post-content';
+                    postContent.textContent = post.content;
+                    postElement.appendChild(postContent);
+
+                    if (post.images && post.images.length > 0) {
+                        const postImages = document.createElement('div');
+                        postImages.className = 'post-images';
+
+                        post.images.forEach(imageUrl => {
+                            const img = document.createElement('img');
+                            img.src = imageUrl;
+                            img.alt = 'image';
+                            img.loading = 'lazy';
+                            postImages.appendChild(img);
+                        });
+
+                        postElement.appendChild(postImages);
+                    }
+
+                    const postFooter = document.createElement('div');
+                    postFooter.className = 'post-footer';
+
+                    const likesAction = document.createElement('div');
+                    likesAction.className = 'post-action likes-action';
+                    likesAction.innerHTML = `
+                        <i class="fa-solid fa-heart"></i>
+                        <span>${post.likes}</span>
+                    `;
+                    postFooter.appendChild(likesAction);
+
+                    const commentsAction = document.createElement('div');
+                    commentsAction.className = 'post-action comments-action';
+                    commentsAction.innerHTML = `
+                        <i class="fa-solid fa-comment"></i>
+                        <span>${post.comments}</span>
+                    `;
+                    postFooter.appendChild(commentsAction);
+
+
+                    postElement.appendChild(postFooter);
+
+                    postsContainer.appendChild(postElement);
+                });
+
+                resultsDiv.appendChild(postsContainer);
+            } else {
+                const noPosts = document.createElement('div');
+                noPosts.className = 'no-results';
+                noPosts.innerHTML = `
+                    <i class="fa-solid fa-inbox"></i>
+                    <p>no posts found</p>
+                `;
+                resultsDiv.appendChild(noPosts);
+            }
+        }
+
+        window.addEventListener('DOMContentLoaded', () => {
+            const urlParams = new URLSearchParams(window.location.search);
+            const username = urlParams.get('username');
+            if (username) {
+                document.getElementById('userInput').value = username;
+                fetchPikidiaryUser();
+            }
+        });
+    </script>
